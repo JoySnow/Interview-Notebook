@@ -266,6 +266,34 @@ Input: [73, 74, 75, 71, 69, 72, 76, 73]
 Output: [1, 1, 4, 2, 1, 1, 0, 0]
 ```
 
+```python
+class Solution(object):
+    def dailyTemperatures(self, T):
+        # Hash
+        # Solition-1 in
+        # https://leetcode.com/problems/daily-temperatures/solution/
+        N = len(T)
+        nxt = [float('inf')] * 102  # index is value, value is index of items,
+        ans = [0] * N
+
+        for i in xrange(N-1, -1, -1):
+            # In the nxt, find the min value, so that's the nearest one.
+            the_warmer_index = min(nxt[j] for j in xrange(T[i]+1, 102))
+            if the_warmer_index < float('inf'):
+                # not the default value, means it do exist
+                ans[i] = the_warmer_index - i  # i: your index, get the gap
+            nxt[T[i]] = i
+
+        return ans
+```
+
+Hash, Cloud also try  https://leetcode.com/problems/daily-temperatures/discuss/109858/Simple-Python-by-hashing-the-temperatures
+map input list to tmp based table,
+seach in a small range.
+
+Stack try
+https://leetcode.com/problems/daily-temperatures/discuss/113898/map
+
 
 在遍历数组时用 Stack 把数组中的数存起来，如果当前遍历的数比栈顶元素来的大，说明栈顶元素的下一个比它大的数就是当前元素。
 
