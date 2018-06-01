@@ -287,30 +287,38 @@ class Solution(object):
         return ans
 ```
 
-Hash, Cloud also try  https://leetcode.com/problems/daily-temperatures/discuss/109858/Simple-Python-by-hashing-the-temperatures
-map input list to tmp based table,
-seach in a small range.
-
-Stack try
-https://leetcode.com/problems/daily-temperatures/discuss/113898/map
-
-
-在遍历数组时用 Stack 把数组中的数存起来，如果当前遍历的数比栈顶元素来的大，说明栈顶元素的下一个比它大的数就是当前元素。
-
 ```python
-public int[] dailyTemperatures(int[] temperatures) {
-    int n = temperatures.length;
-    int[] ret = new int[n];
-    Stack<Integer> stack = new Stack<>();
-    for(int i = 0; i < n; i++) {
-        while(!stack.isEmpty() && temperatures[i] > temperatures[stack.peek()]) {
-            int idx = stack.pop();
-            ret[idx] = i - idx;
-        }
-        stack.add(i);
-    }
-    return ret;
-}
+class Solution(object):
+    def dailyTemperatures(self, T):
+        # Stack
+        # Solition-2 in
+        # https://leetcode.com/problems/daily-temperatures/solution/
+
+        """
+        当计算T[i]的ans[i]时, 需要考虑的只是 T[i+1] ~ T[N] 中 值递增 的部分。
+        Thus, we should remember a list of indices representing a strictly increasing list of temperatures.
+        A 单调减 (from bottom to top) Stack can work for this.
+        Stack 中的值是当前要判断的X 的 后续 且 递增的 所有 有价值的value. Top是最小值哦。
+
+        """
+        N = len(T)
+        if N == 1:
+            return [0]
+
+        ans = [0]*N
+        ans[-1] = 0
+
+        st = [(N-1, T[-1]), ]
+        for i in xrange(N-2, -1, -1):
+            x = T[i]
+            # pop all <=x ones in stack, until maintainable to push
+            while st and x >= st[-1][1]:
+                st.pop()  # pop
+            # The ans is always 0 for those one to push to the bottom directly.
+            ans[i] = st[-1][0] - i if st else 0
+            st.append((i, x))  # push
+
+        return ans
 ```
 
 **在另一个数组中比当前元素大的下一个元素**
