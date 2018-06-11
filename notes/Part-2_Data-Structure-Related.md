@@ -331,29 +331,34 @@ Output: [-1,3,-1]
 ```
 
 ```python
-public int[] nextGreaterElement(int[] nums1, int[] nums2) {
-    Map<Integer, Integer> map = new HashMap<>();
-    Stack<Integer> stack = new Stack<>();
-    for(int num : nums2){
-        while(!stack.isEmpty() && num > stack.peek()){
-            map.put(stack.pop(), num);
-        }
-        stack.add(num);
-    }
-    int[] ret = new int[nums1.length];
-    for(int i = 0; i < nums1.length; i++){
-        if(map.containsKey(nums1[i])) ret[i] = map.get(nums1[i]);
-        else ret[i] = -1;
-    }
-    return ret;
-}
+class Solution(object):
+    def nextGreaterElement(self, findNums, nums):
+        """
+        :type findNums: List[int]
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+
+        N = len(nums)
+        st = []
+        d = {}
+        for i in xrange(N-1, -1 ,-1):
+            x = nums[i]
+            while st and st[-1] <= x:
+                st.pop()
+
+            d[x] = st[-1] if st else -1
+            st.append(x)
+
+        return [d[x] for x in findNums]
 ```
 
-**循环数组中比当前元素大的下一个元素**
+**循环数组中比当前元素大的下一个元素** TODO
 
 [Leetcode : 503. Next Greater Element II (Medium)](https://leetcode.com/problems/next-greater-element-ii/description/)
 
 ```python
+
 public int[] nextGreaterElements(int[] nums) {
     int n = nums.length, next[] = new int[n];
     Arrays.fill(next, -1);
